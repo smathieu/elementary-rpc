@@ -20,4 +20,30 @@ describe Elementary::Connection do
       it { should be_instance_of described_class }
     end
   end
+
+  describe 'an echo request', :type => :integration do
+    let(:connection) do
+      described_class.new(Elementary::Rspec::Simple)
+    end
+
+    describe 'rpc' do
+      describe '#echo' do
+        let(:request) { Elementary::Rspec::String.new(:data => 'rspec') }
+
+        subject(:response) { connection.rpc.echo(request) }
+
+        it 'should have a value containing the echoed string' do
+          puts "Sending req #{Time.now.to_f}"
+          expect(response).to be_instance_of Elementary::Future
+
+          puts "Waiting for future #{Time.now.to_f}"
+          value = response.value # Wait on the future
+          puts "Future responded: #{Time.now.to_f}"
+
+          expect(value).to be_instance_of Elementary::Rspec::String
+          expect(value.data).to eql('rspec')
+        end
+      end
+    end
+  end
 end
