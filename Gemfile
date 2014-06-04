@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'faraday'
+gem 'rack'
 gem 'protobuf', :github => 'lookout/protobuf',
                 :ref => 'wip/http'
 
@@ -13,4 +14,6 @@ end
 
 group :development do
   gem 'pry'
+  gem 'debugger', :platform => :mri
+  gem 'debugger-pry', :platform => :mri
 end
