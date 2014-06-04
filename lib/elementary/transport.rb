@@ -8,27 +8,23 @@ require 'elementary/future'
 module Elementary
   module Transport
     class HTTP
-      def initialize(service)
-        @service = service
+      def initialize(app)
+        # swallw app, we should be at the bottom of the middleware stack
       end
 
-      def method_missing(name, *params)
-        rpc_method = @service.rpcs[name.to_sym]
-
-        # XXX: explode if rpc_method is nil
-
-        future = Elementary::Future.new do
-          response = client.post do |h|
-            path = "/#{CGI.escape(@service.name)}/#{name}"
-            h.url(path)
-            h.body = params[0].encode
-          end
-
-          rpc_method[:response_type].decode(response.body)
+      def call(service, rpc_method, *params)
+        # MIDDLEWARE STACK TERMINATOR
+        response = client.post do |h|
+          path = "/#{CGI.escape(service.name)}/#{rpc_method.method}"
+          h.url(path)
+          h.body = params[0].encode
         end
 
-        return future.execute
+        # XXX: Need to raise on failures?
+        return rpc_method[:response_type].decode(response.body)
       end
+
+      private
 
       def client
         Faraday.new(:url => 'http://localhost:8001/') do |f|
