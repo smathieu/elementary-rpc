@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'elementary/rpc/version'
+require 'elementary/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "elementary-rpc"
-  spec.version       = Elementary::Rpc::VERSION
+  spec.version       = Elementary::VERSION
   spec.authors       = ["R. Tyler Croy"]
   spec.email         = ["tyler@monkeypox.org"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = "Gem supporting Protobuf RPC in a simple way"
+  spec.description   = "BLANK"
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "rake"
+
+  spec.add_dependency 'concurrent-ruby', '~> 0.6.0'
 end
