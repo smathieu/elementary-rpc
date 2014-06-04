@@ -1,4 +1,7 @@
+require 'rubygems'
+require 'concurrent'
+
 module Elementary
-  class Future
+  class Future < Concurrent::Future
   end
 end
