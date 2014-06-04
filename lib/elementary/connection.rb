@@ -29,24 +29,21 @@ module Elementary
       @transport = opts[:transport] || :http
     end
 
-    def middleware
-    end
-
     def rpc
-      Executor.new(@service)
+      Executor.new(@service, Elementary::Transport::HTTP.new(nil))
     end
   end
 
   class Executor
-    attr_reader :service
+    attr_reader :service, :transport
 
-    def initialize(service)
+    def initialize(service, transport)
       @service = service
+      @transport = transport
     end
 
     def middleware
       [
-        Elementary::Transport::HTTP,
         Elementary::Middleware::Statsd,
       ]
     end
@@ -60,7 +57,7 @@ module Elementary
         #
         # Easiest to think of it like this:
         #   Statsd.new(HTTP.new(nil))
-        stack = middleware.inject(nil) do |accumulator, ware|
+        stack = middleware.inject(transport) do |accumulator, ware|
           ware.new(accumulator)
         end
 
