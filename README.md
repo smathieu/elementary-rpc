@@ -1,6 +1,59 @@
-# Elementary::Rpc
+# Elementary RPC
 
-TODO: Write a gem description
+Elementary RPC is a basic
+[Protobuf](https://developers.google.com/protocol-buffers/docs/overview) HTTP
+RPC gem which aims to provide:
+
+ * Easy RPC usage
+ * Parallelism by default
+ * An easily extended RPC request pipeline
+
+### Sample Usage
+
+For the following Protobuf RPC service definition:
+
+```
+package echoserv;
+
+message String {
+  required string data  = 1;
+  optional int64 status = 2;
+}
+
+service Simple {
+  rpc Echo (String) returns (String);
+  rpc Reverse (String) returns (String);
+}
+```
+
+A corresponding Ruby client might look something like this:
+
+```ruby
+
+require 'elementary/connection'
+
+get '/restful/echo/:str' do |str|
+  # Create our Connection object that knows about our Protobuf service
+  # definition
+  c = Elementary::Connection.new(Echoserv::Simple)
+  # Create a Protobuf message to send over RPC
+  msg = Echoserv::String.new(:data => str)
+
+
+  echoed = c.rpc.echo(msg) # => Elementary::Future
+  reversed = c.rpc.reverse(msg) # => Elementary::Future
+
+  # Twiddle our thumbs doing other things
+
+  status 200
+  content_type :json
+
+  {
+    :echoed => echoed.value,
+    :reversed => reversed.value,
+  }.to_json
+end
+```
 
 ## Installation
 
