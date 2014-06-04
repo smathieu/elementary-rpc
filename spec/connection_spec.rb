@@ -21,11 +21,19 @@ describe Elementary::Connection do
     end
   end
 
-  describe 'an echo request', :type => :integration do
-    let(:connection) do
-      described_class.new(Elementary::Rspec::Simple)
-    end
+  let(:connection) do
+    described_class.new(Elementary::Rspec::Simple)
+  end
 
+  describe '#select_transport' do
+    subject(:transport) { connection.select_transport }
+
+    context 'by default' do
+      it { should be_instance_of Elementary::Transport::HTTP }
+    end
+  end
+
+  describe 'an echo request', :type => :integration do
     describe 'rpc' do
       describe '#echo' do
         let(:request) { Elementary::Rspec::String.new(:data => 'rspec') }

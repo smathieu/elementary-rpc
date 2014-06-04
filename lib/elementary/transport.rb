@@ -8,8 +8,8 @@ require 'elementary/future'
 module Elementary
   module Transport
     class HTTP
-      def initialize(app)
-        # swallw app, we should be at the bottom of the middleware stack
+      def initialize(hosts)
+        @hosts = hosts
       end
 
       def call(service, rpc_method, *params)
@@ -26,8 +26,16 @@ module Elementary
 
       private
 
+      def host_url
+        # XXX: need to support a full collection of hosts similar to
+        # elasticsearch-ruby
+        host = @hosts.first
+        return "http://#{host[:host]}:#{host[:port]}/"
+      end
+
       def client
-        Faraday.new(:url => 'http://localhost:8001/') do |f|
+        # XXX: client caching, duh
+        Faraday.new(:url => host_url) do |f|
           f.response :logger
           f.adapter Faraday.default_adapter
         end
