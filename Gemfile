@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in elementary-rpc.gemspec
 gemspec
 
-gem 'faraday'
 gem 'rack'
 gem 'protobuf', :github => 'lookout/protobuf',
                 :ref => 'wip/http'

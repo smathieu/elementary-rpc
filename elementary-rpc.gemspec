@@ -22,4 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
 
   spec.add_dependency 'concurrent-ruby', '~> 0.6.0'
+  spec.add_dependency 'faraday', '~> 0.9.0'
+  spec.add_dependency 'lookout-statsd', '~> 0.9.0'
 end
