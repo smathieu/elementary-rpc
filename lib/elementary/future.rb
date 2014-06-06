@@ -3,17 +3,19 @@ require 'concurrent'
 
 module Elementary
   class Future < Concurrent::Future
-    # TODO: Implement method_missing such that any method not defined on
-    # Concurrent::Future will cause the future to be resolved and the method to
-    # be called on the resulting value.
+    # Invoke undefined methods on the value of the future
     #
-    # This would make things like:
-    #
+    # E.g.
     #   results = c.rpc.search(query)
     #   # sleep maxint
     #   results.each do |result|
     #     # work
     #   end
     # 
+    # Which would really invoke:
+    #   results.value.each
+    def method_missing(method, *params)
+      self.value.send(method, *params)
+    end
   end
 end
