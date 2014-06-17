@@ -34,11 +34,14 @@ module Elementary
       end
 
       def client
-        # XXX: client caching, duh
-        Faraday.new(:url => host_url) do |f|
+        return @client if @client
+
+        @client = Faraday.new(:url => host_url) do |f|
           f.response :logger
           f.adapter Faraday.default_adapter
         end
+
+        return @client
       end
     end
   end
