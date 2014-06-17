@@ -23,7 +23,7 @@ describe Elementary::Future do
 
       it 'should invoke the method on the value of the future' do
         value = 1337
-        actual.stub(:number).and_return(value)
+        expect(actual).to receive(:number).and_return(value)
 
         expect(future.number).to eql(value)
       end
