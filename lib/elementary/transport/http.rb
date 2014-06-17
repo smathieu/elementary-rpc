@@ -13,15 +13,20 @@ module Elementary
       end
 
       def call(service, rpc_method, *params)
-        # MIDDLEWARE STACK TERMINATOR
-        response = client.post do |h|
-          path = "/#{CGI.escape(service.name)}/#{rpc_method.method}"
-          h.url(path)
-          h.body = params[0].encode
-        end
+        begin
+          # MIDDLEWARE STACK TERMINATOR
+          response = client.post do |h|
+            path = "/#{CGI.escape(service.name)}/#{rpc_method.method}"
+            h.url(path)
+            h.body = params[0].encode
+          end
 
-        # XXX: Need to raise on failures?
-        return rpc_method[:response_type].decode(response.body)
+          # XXX: Need to raise on failures?
+          return rpc_method[:response_type].decode(response.body)
+        rescue StandardError => e
+          puts "UNHANDLED EXCEPTION #{e.inspect}"
+          raise
+        end
       end
 
       private
@@ -38,7 +43,7 @@ module Elementary
 
         @client = Faraday.new(:url => host_url) do |f|
           f.response :logger
-          f.adapter Faraday.default_adapter
+          f.adapter :net_http_persistent
         end
 
         return @client
