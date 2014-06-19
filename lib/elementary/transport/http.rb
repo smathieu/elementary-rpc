@@ -19,7 +19,7 @@ module Elementary
         begin
           # MIDDLEWARE STACK TERMINATOR
           response = client.post do |h|
-            path = "/#{CGI.escape(service.name)}/#{rpc_method.method}"
+            path = "#{CGI.escape(service.name)}/#{rpc_method.method}"
             h.url(path)
             h.body = params[0].encode
           end
