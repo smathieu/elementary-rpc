@@ -33,7 +33,7 @@ module Elementary
     end
 
     def rpc
-      Elementary::Executor.new(@service, select_transport)
+      @rpc ||= Elementary::Executor.new(@service, select_transport)
     end
 
     def select_transport
