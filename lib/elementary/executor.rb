@@ -8,12 +8,6 @@ module Elementary
       @transport = transport
     end
 
-    def middleware
-      [
-        Elementary::Middleware::Statsd,
-      ]
-    end
-
     def method_missing(method_name, *params)
       rpc_method = service.rpcs[method_name.to_sym]
       # XXX: explode if rpc_method is nil
@@ -23,8 +17,10 @@ module Elementary
         #
         # Easiest to think of it like this:
         #   Statsd.new(HTTP.new(nil))
-        stack = middleware.inject(transport) do |accumulator, ware|
-          ware.new(accumulator)
+        stack = Elementary.middleware.inject(transport) do |accumulator, middleware|
+          klass = middleware.first
+          options = middleware.last
+          klass.new(accumulator, options)
         end
 
         stack.call(service, rpc_method, *params)

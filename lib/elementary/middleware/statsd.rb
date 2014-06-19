@@ -4,10 +4,15 @@ require 'statsd'
 module Elementary
   module Middleware
     class Statsd
-      def initialize(app)
+      # Create a new Statsd middleware for Elementary
+      #
+      # @param [Hash] opts Hash of optional parameters
+      # @option opts [::Statsd::Client] :client Set to an existing instance of
+      # a +Statsd::Client+
+      def initialize(app, opts={})
         @app = app
-        # XXX: needs to be more configurable
-        @statsd = ::Statsd::Client.new
+
+        @statsd = opts[:client] || ::Statsd::Client.new
       end
 
       def call(service, rpc_method, *params)

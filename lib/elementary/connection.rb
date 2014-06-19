@@ -16,8 +16,6 @@ module Elementary
     # @param [Hash] opts
     # @options opts [Symbol] :transport Defaults to :http, must map to a class
     #   in the +Elementary::Transport+ module
-    # @options opts [Boolean] :raise_on_error Defaults to true, will cause
-    #   rpc errors to raise exceptions
     # @optiosn opts [Array] :hosts An array of {:host => 'localhost', :port =>
     #   8080} hashes to instruct the connection
     def initialize(service, opts={})
@@ -26,7 +24,6 @@ module Elementary
           "Cannot construct an Elementary::Connection with `#{service}` (#{service.class})"
       end
 
-      @raise_on_error = opts[:raise_on_error] || true
       @service = service
       @transport = opts[:transport]
       @hosts = opts[:hosts] || DEFAULT_HOSTS

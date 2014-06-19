@@ -50,11 +50,20 @@ describe Elementary::Connection do
   end
 
   describe 'an echo request', :type => :integration do
+    after :each do
+      Elementary.flush_middleware
+    end
+
     describe 'rpc' do
       describe '#echo' do
         let(:request) { Elementary::Rspec::String.new(:data => 'rspec') }
-
         subject(:response) { connection.rpc.echo(request) }
+
+        before :each do
+          Elementary.use Elementary::Middleware::Dummy, :rspec => true
+          expect_any_instance_of(Elementary::Middleware::Dummy).to \
+                  receive(:call).and_call_original
+        end
 
         it 'should have a value containing the echoed string' do
           puts "Sending req #{Time.now.to_f}"
@@ -64,7 +73,7 @@ describe Elementary::Connection do
           value = response.value # Wait on the future
           puts "Future responded: #{Time.now.to_f}"
 
-          expect(value).to be_instance_of Elementary::Rspec::String
+          expect(response).not_to be_rejected
           expect(value.data).to eql('rspec')
         end
       end

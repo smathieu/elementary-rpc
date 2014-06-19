@@ -18,7 +18,6 @@ module Elementary
 
       def call(service, rpc_method, *params)
         begin
-          # MIDDLEWARE STACK TERMINATOR
           response = client.post do |h|
             path = "#{CGI.escape(service.name)}/#{rpc_method.method}"
             h.url(path)
@@ -29,12 +28,12 @@ module Elementary
           error_code = response.headers[ERROR_HEADER_CODE]
 
           if error_msg
-            raise RPCFailure, "Error #{error_code}: #{error_msg}"
+            raise Elementary::Errors::RPCFailure, "Error #{error_code}: #{error_msg}"
           end
 
           return rpc_method[:response_type].decode(response.body)
         rescue StandardError => e
-          puts "UNHANDLED EXCEPTION #{e.inspect}"
+          puts "EXCEPTION #{e.inspect}"
           raise
         end
       end
