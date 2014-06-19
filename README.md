@@ -33,9 +33,11 @@ A corresponding Ruby client might look something like this:
 require 'elementary/connection'
 
 get '/restful/echo/:str' do |str|
+
+  hosts = [{:host => 'localhost', :port => '9292', :prefix => '/rpcserv'}]
   # Create our Connection object that knows about our Protobuf service
   # definition
-  c = Elementary::Connection.new(Echoserv::Simple)
+  c = Elementary::Connection.new(Echoserv::Simple, :hosts => hosts)
   # Create a Protobuf message to send over RPC
   msg = Echoserv::String.new(:data => str)
 

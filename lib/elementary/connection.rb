@@ -8,6 +8,8 @@ module Elementary
   class Connection
     attr_reader :raise_on_error, :service
 
+    DEFAULT_HOSTS = [{:host => 'localhost', :port => 8000}].freeze
+
     # Initialize a connection to the +Protobuf::Rpc::Service+
     #
     # @param [Protobuf::Rpc::Service] service
@@ -27,7 +29,7 @@ module Elementary
       @raise_on_error = opts[:raise_on_error] || true
       @service = service
       @transport = opts[:transport]
-      @hosts = opts[:hosts] || [{:host => 'localhost', :port => 8000}]
+      @hosts = opts[:hosts] || DEFAULT_HOSTS
     end
 
     def rpc

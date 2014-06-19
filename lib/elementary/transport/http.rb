@@ -45,7 +45,8 @@ module Elementary
         # XXX: need to support a full collection of hosts similar to
         # elasticsearch-ruby
         host = @hosts.first
-        return "http://#{host[:host]}:#{host[:port]}/"
+        prefix = host[:prefix]
+        return "http://#{host[:host]}:#{host[:port]}/#{prefix}"
       end
 
       def client
