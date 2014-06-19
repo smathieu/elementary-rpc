@@ -33,6 +33,22 @@ describe Elementary::Connection do
     end
   end
 
+
+  describe 'an error request', :type => :integration do
+    describe 'rpc' do
+      describe '#error' do
+        subject(:response) { connection.rpc.error(request) }
+        let(:request) { Elementary::Rspec::String.new(:data => 'rspec') }
+
+        before :each do
+          response.value
+        end
+
+        it { should be_rejected }
+      end
+    end
+  end
+
   describe 'an echo request', :type => :integration do
     describe 'rpc' do
       describe '#echo' do

@@ -9,6 +9,10 @@ module Elementary
 
         respond_with(String.new(:data => request.data))
       end
+
+      def error
+        rpc_failed 'sample failure'
+      end
     end
   end
 end

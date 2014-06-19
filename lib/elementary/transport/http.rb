@@ -8,6 +8,9 @@ require 'elementary/future'
 module Elementary
   module Transport
     class HTTP
+      ERROR_HEADER_MSG = 'x-protobuf-error'
+      ERROR_HEADER_CODE = 'x-protobuf-error-reason'
+
       def initialize(hosts)
         @hosts = hosts
       end
@@ -19,6 +22,13 @@ module Elementary
             path = "/#{CGI.escape(service.name)}/#{rpc_method.method}"
             h.url(path)
             h.body = params[0].encode
+          end
+
+          error_msg = response.headers[ERROR_HEADER_MSG]
+          error_code = response.headers[ERROR_HEADER_CODE]
+
+          if error_msg
+            raise StandardError, "Error #{error_code}: #{error_msg}"
           end
 
           # XXX: Need to raise on failures?

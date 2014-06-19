@@ -27,6 +27,7 @@ module Elementary
     #
     class Simple < ::Protobuf::Rpc::Service
       rpc :echo, ::Elementary::Rspec::String, ::Elementary::Rspec::String
+      rpc :error, ::Elementary::Rspec::String, ::Elementary::Rspec::String
     end
 
   end
