@@ -1,4 +1,5 @@
-require 'elementary/version'
-
 module Elementary
 end
+
+require 'elementary/version'
+require 'elementary/connection'
