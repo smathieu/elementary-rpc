@@ -29,32 +29,38 @@ service Simple {
 A corresponding Ruby client might look something like this:
 
 ```ruby
+require 'rubygems'
+require 'elementary'
 
-require 'elementary/connection'
-
-get '/restful/echo/:str' do |str|
-
-  hosts = [{:host => 'localhost', :port => '9292', :prefix => '/rpcserv'}]
-  # Create our Connection object that knows about our Protobuf service
-  # definition
-  c = Elementary::Connection.new(Echoserv::Simple, :hosts => hosts)
-  # Create a Protobuf message to send over RPC
-  msg = Echoserv::String.new(:data => str)
+require 'echoserv/service.pb' # Include our protobuf object declarations
 
 
-  echoed = c.rpc.echo(msg) # => Elementary::Future
-  reversed = c.rpc.reverse(msg) # => Elementary::Future
+hosts = [{:host => 'localhost', :port => '9292', :prefix => '/rpcserv'}]
 
-  # Twiddle our thumbs doing other things
 
-  status 200
-  content_type :json
+# Let's use the Statsd middleware to send RPC timing and count information to 
+# Graphite (this presumes we have already used `Statsd.create_instance` elsewhere
+# in our code)
+Elementary.use(Elementary::Middleware::Statsd, :client => Statsd.instance)
 
-  {
-    :echoed => echoed.value,
-    :reversed => reversed.value,
-  }.to_json
-end
+
+# Create our Connection object that knows about our Protobuf service
+# definition
+c = Elementary::Connection.new(Echoserv::Simple, :hosts => hosts)
+
+# Create a Protobuf message to send over RPC
+msg = Echoserv::String.new(:data => str)
+
+
+echoed = c.rpc.echo(msg) # => Elementary::Future
+reversed = c.rpc.reverse(msg) # => Elementary::Future
+
+sleep 10 # Twiddle our thumbs doing other things
+
+puts {
+  :echoed => echoed.value, # resolve the future and get our value out
+  :reversed => reversed.value,
+}.to_json
 ```
 
 ## Installation
