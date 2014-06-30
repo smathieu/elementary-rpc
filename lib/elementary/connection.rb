@@ -6,7 +6,7 @@ require 'elementary/transport'
 
 module Elementary
   class Connection
-    attr_reader :raise_on_error, :service
+    attr_reader :service
 
     DEFAULT_HOSTS = [{:host => 'localhost', :port => 8000}].freeze
 

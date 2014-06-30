@@ -33,7 +33,7 @@ module Elementary
 
           return rpc_method[:response_type].decode(response.body)
         rescue StandardError => e
-          #puts "EXCEPTION #{e.inspect}"
+          puts "EXCEPTION #{e.inspect}"
           raise
         end
       end
@@ -53,7 +53,11 @@ module Elementary
 
         @client = Faraday.new(:url => host_url) do |f|
           f.response :logger
-          f.adapter :net_http_persistent
+          if Elementary.synchronous?
+            f.adapter Faraday.default_adapter
+          else
+            f.adapter :net_http_persistent
+          end
         end
 
         return @client

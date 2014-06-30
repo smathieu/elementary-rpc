@@ -1,4 +1,17 @@
 module Elementary
+
+  def self.disable_concurrency!
+    @synchronous = true
+  end
+
+  def self.enable_concurrency!
+    @synchronous = false
+  end
+
+  def self.synchronous?
+    !!@synchronous
+  end
+
   def self.middleware
     @middleware ||= []
   end

@@ -28,4 +28,15 @@ describe Elementary do
       it { should be true }
     end
   end
+
+  describe '.synchronous?' do
+    subject { described_class.synchronous? }
+    context 'by default' do
+      it { should be false }
+    end
+
+    after :each do
+      described_class.enable_concurrency!
+    end
+  end
 end

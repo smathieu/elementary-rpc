@@ -35,4 +35,25 @@ describe Elementary::Future do
       end
     end
   end
+
+  describe '#execute' do
+    subject(:future) do
+      described_class.new do
+        rval
+      end
+    end
+
+    context 'when concurrency has been disabled' do
+      let(:rval) { 'rspec' }
+      before :each do
+        expect(Elementary).to receive(:synchronous?).and_return(true).twice
+      end
+
+      it 'should invoke the block' do
+        r = future.execute
+        expect(r).to be_instance_of described_class
+        expect(r.value).to eql(rval)
+      end
+    end
+  end
 end
