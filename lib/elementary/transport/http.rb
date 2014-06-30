@@ -33,7 +33,7 @@ module Elementary
 
           return rpc_method[:response_type].decode(response.body)
         rescue StandardError => e
-          puts "EXCEPTION #{e.inspect}"
+          #puts "EXCEPTION #{e.inspect}"
           raise
         end
       end
