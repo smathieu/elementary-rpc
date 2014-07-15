@@ -18,6 +18,9 @@ module Elementary
     #   in the +Elementary::Transport+ module
     # @optiosn opts [Array] :hosts An array of {:host => 'localhost', :port =>
     #   8080} hashes to instruct the connection
+    # @option opts [Hash] :transport_options A +Hash+ of request options that
+    #   will be passed down to the transport layer. This will depend on what
+    #   options are available by the underlying transport
     def initialize(service, opts={})
       if service.nil? || service.superclass != Protobuf::Rpc::Service
         raise ArgumentError,
@@ -27,6 +30,7 @@ module Elementary
       @service = service
       @transport = opts[:transport]
       @hosts = opts[:hosts] || DEFAULT_HOSTS
+      @transport_opts = opts[:transport_options] || {}
     end
 
     def rpc
@@ -34,7 +38,7 @@ module Elementary
     end
 
     def select_transport
-      Elementary::Transport::HTTP.new(@hosts)
+      Elementary::Transport::HTTP.new(@hosts, @transport_opts)
     end
   end
 end

@@ -12,8 +12,15 @@ module Elementary
       ERROR_HEADER_MSG = 'x-protobuf-error'
       ERROR_HEADER_CODE = 'x-protobuf-error-reason'
 
-      def initialize(hosts)
+      # Create a HTTP transport object for sending protobuf objects to the
+      # service host names enumerated in +hosts+
+      #
+      # @param [Array] hosts A collection of host declarations ({:host => '',
+      #   :port => 0, :prefix => '/'})
+      # @param [Hash] opts Options to be passed directly into Faraday.
+      def initialize(hosts, opts={})
         @hosts = hosts
+        @options = opts
       end
 
       def call(service, rpc_method, *params)
@@ -51,7 +58,8 @@ module Elementary
       def client
         return @client if @client
 
-        @client = Faraday.new(:url => host_url) do |f|
+        faraday_options = @options.merge({:url => host_url})
+        @client = Faraday.new(faraday_options) do |f|
           f.response :logger
           f.adapter :net_http_persistent
         end

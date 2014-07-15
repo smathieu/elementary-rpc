@@ -3,7 +3,8 @@ require 'elementary/transport/http'
 
 describe Elementary::Transport::HTTP do
   let(:hosts) { [] }
-  let(:http) { described_class.new(hosts) }
+  let(:opts) { {} }
+  let(:http) { described_class.new(hosts, opts) }
 
   describe '#host_url' do
     subject(:host_url) { http.send(:host_url) }
@@ -55,6 +56,19 @@ describe Elementary::Transport::HTTP do
 
       # Object identity!
       expect(first).to be second
+    end
+
+    context 'with options passed to the initializer' do
+      let(:opts) do
+        {
+          :request => {:timeout => 3, :open_timeout => 1},
+        }
+      end
+
+      it 'should pass options to Faraday.new' do
+        expect(Faraday).to receive(:new).with(hash_including(opts)).and_call_original
+        expect(client).to be_instance_of Faraday::Connection
+      end
     end
   end
 end
