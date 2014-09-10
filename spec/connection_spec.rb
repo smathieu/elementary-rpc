@@ -21,6 +21,38 @@ describe Elementary::Connection do
     end
   end
 
+  context 'with an opts hash' do
+    subject(:connection) { described_class.new(Elementary::Rspec::Simple, opts) }
+
+    context 'with symbolic keys' do
+      let(:opts) { { :hosts => [{:host => 'foo', :prefix => '/bar'}] } }
+
+      it { should be_instance_of described_class }
+
+      it 'should have one host, with a host key and a prefix key' do
+        hosts = connection.instance_variable_get(:@hosts)
+
+        expect(hosts.size).to be 1
+        expect(hosts.first[:host]).to eql opts[:hosts].first[:host]
+        expect(hosts.first[:prefix]).to eql opts[:hosts].first[:prefix]
+      end
+    end
+
+    context 'with string keys' do
+      let(:opts) { { 'hosts' => [{'host' => 'foo', 'prefix' => '/bar'}] } }
+
+      it { should be_instance_of described_class }
+
+      it 'should have one host, with a host key and a prefix key' do
+        hosts = connection.instance_variable_get(:@hosts)
+
+        expect(hosts.size).to be 1
+        expect(hosts.first[:host]).to eql opts['hosts'].first['host']
+        expect(hosts.first[:prefix]).to eql opts['hosts'].first['prefix']
+      end
+    end
+  end
+
   context 'with a simple RPC service' do
     let(:opts) { {} }
     let(:connection) do

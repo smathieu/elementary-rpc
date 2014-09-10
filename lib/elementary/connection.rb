@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'protobuf'
+require 'hashie'
 
 require 'elementary/middleware'
 require 'elementary/transport'
@@ -22,6 +23,8 @@ module Elementary
     #   will be passed down to the transport layer. This will depend on what
     #   options are available by the underlying transport
     def initialize(service, opts={})
+      opts = Hashie::Mash.new(opts)
+
       if service.nil? || service.superclass != Protobuf::Rpc::Service
         raise ArgumentError,
           "Cannot construct an Elementary::Connection with `#{service}` (#{service.class})"
