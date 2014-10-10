@@ -88,3 +88,7 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+### Testing
+
+`bundle exec rpc_server start ./spec/support/simpleservice.rb -p 8000 --http`

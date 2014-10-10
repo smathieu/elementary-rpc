@@ -68,10 +68,10 @@ describe Elementary::Connection do
       context 'with transport_options' do
         let(:opts) { {:transport_options => transport_opts} }
         let(:transport_opts) do
-          {
+          Hashie::Mash.new({
             :timeout => 3,
             :open_timeout => 1,
-          }
+          })
         end
 
         it 'should pass request_options to the transport' do

@@ -4,8 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rack'
-gem 'protobuf', :github => 'lookout/protobuf',
-                :ref => 'wip/http'
+gem 'protobuf', :github => 'lookout/protobuffy'
 
 group :test do
   gem 'rspec'
