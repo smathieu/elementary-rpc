@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rack'
-gem 'protobuf', :github => 'lookout/protobuffy'
+gem 'protobuffy', :github => 'lookout/protobuffy'
 
 group :test do
   gem 'rspec'
