@@ -28,6 +28,8 @@ module Elementary
     class Simple < ::Protobuf::Rpc::Service
       rpc :echo, ::Elementary::Rspec::String, ::Elementary::Rspec::String
       rpc :error, ::Elementary::Rspec::String, ::Elementary::Rspec::String
+      rpc :bad_request_data_method, ::Elementary::Rspec::String, ::Elementary::Rspec::String
+      rpc :service_not_found_method, ::Elementary::Rspec::String, ::Elementary::Rspec::String
     end
 
   end

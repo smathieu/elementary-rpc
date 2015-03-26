@@ -17,7 +17,7 @@ module Elementary
     # @param [Hash] opts
     # @options opts [Symbol] :transport Defaults to :http, must map to a class
     #   in the +Elementary::Transport+ module
-    # @optiosn opts [Array] :hosts An array of {:host => 'localhost', :port =>
+    # @options opts [Array] :hosts An array of {:host => 'localhost', :port =>
     #   8080} hashes to instruct the connection
     # @option opts [Hash] :transport_options A +Hash+ of request options that
     #   will be passed down to the transport layer. This will depend on what

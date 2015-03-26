@@ -9,4 +9,6 @@ message String {
 service Simple {
   rpc Echo (String) returns (String);
   rpc Error (String) returns (String);
+  rpc BadRequestDataMethod (String) returns (String);
+  rpc ServiceNotFoundMethod (String) returns (String);
 }

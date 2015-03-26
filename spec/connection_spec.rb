@@ -81,7 +81,6 @@ describe Elementary::Connection do
       end
     end
 
-
     describe 'an error request', :type => :integration do
       describe 'rpc' do
         describe '#error' do
@@ -105,26 +104,39 @@ describe Elementary::Connection do
       describe 'rpc' do
         describe '#echo' do
           let(:request) { Elementary::Rspec::String.new(:data => 'rspec') }
-          subject(:response) { connection.rpc.echo(request) }
+          context 'with http connection failure due haproxy resolving service to wrong host or port' do
+            let(:opts) { { 'hosts' => [{'host' => 'localhost', 'port' => '8080'}] } }
+            subject(:response) { connection.rpc.echo(request) }
 
-          before :each do
-            Elementary.use Elementary::Middleware::Dummy, :rspec => true
-            expect_any_instance_of(Elementary::Middleware::Dummy).to \
-                    receive(:call).and_call_original
+            before :each do
+              response.value
+            end
+
+            it { should be_rejected }
+            it { should be_instance_of Elementary::Future }
+            it 'should have a connection refused reason' do
+              expect(response.reason).not_to be_nil
+              expect(response.reason.to_s).to eq("connection refused: localhost:8080")
+            end
           end
+          context 'with http connection success' do
+            let(:opts) { { 'hosts' => [{'host' => 'localhost', 'port' => '8000'}] } }
+            subject(:response) { connection.rpc.echo(request) }
 
-          it 'should have a value containing the echoed string' do
-            puts "Sending req #{Time.now.to_f}"
-            expect(response).to be_instance_of Elementary::Future
+            before :each do
+              Elementary.use Elementary::Middleware::Dummy, :rspec => true
+              expect_any_instance_of(Elementary::Middleware::Dummy).to \
+                      receive(:call).and_call_original
+            end
 
-            puts "Waiting for future #{Time.now.to_f}"
-            value = response.value # Wait on the future
-            puts "Future responded: #{Time.now.to_f}"
-
-            expect(response).not_to be_rejected
-            expect(value.data).to eql('rspec')
+            it 'should have a value containing the echoed string' do
+              expect(response).to be_instance_of Elementary::Future
+              value = response.value # Wait on the future
+              expect(response).not_to be_rejected
+              expect(value.data).to eql('rspec')
+            end
           end
-        end
+         end
       end
     end
   end
