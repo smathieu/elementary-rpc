@@ -6,11 +6,11 @@ def sendAndVerify(msg)
   response = client.invoke_echo_service(Elementary::Rspec::String.new(:data => msg))
   expect(response).to be_rejected
   expect(response.reason.class).to be Elementary::Middleware::HttpStatusError
-  expect(response.reason.message).to include("returned an HTTP response status of 503, so an exception was raised.")
+  expect(response.reason.message).to include("connection refused: localhost:8090")
 end
 
-# This test requires ha-proxy to be listening at localhost:8080, but no real rpc to be available
-describe ElementaryClientUsingAntiPattern, "blah", :type => :integration do
+# This test requires that no process be listening at localhost:8090
+describe ElementaryClientUsingAntiPattern, "http connection returning error code 503", :type => :integration do
   subject (:client) {ElementaryClientUsingAntiPattern.new()}
   describe "#initialize" do
     it "creates a connection" do
@@ -18,7 +18,7 @@ describe ElementaryClientUsingAntiPattern, "blah", :type => :integration do
     end
   end
   describe "#invoke_service" do
-    context 'with http connection returning error code 503' do
+    context 'with http connection returning error connection refused' do
       it "invokes echo service" do
         sendAndVerify('rspec1')
       end

@@ -7,7 +7,7 @@ class ElementaryClientUsingAntiPattern < BaseElementaryClient
 
   def initialize
     @connection = Elementary::Connection.new(Elementary::Rspec::Simple,
-                                             :hosts => [{'host' => 'localhost', 'port' => '8080'}])
+                                             :hosts => [{'host' => 'localhost', 'port' => '8090'}])
   end
 end
 

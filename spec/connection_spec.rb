@@ -104,8 +104,8 @@ describe Elementary::Connection do
       describe 'rpc' do
         describe '#echo' do
           let(:request) { Elementary::Rspec::String.new(:data => 'rspec') }
-          context 'with http connection failure due haproxy resolving service to wrong host or port' do
-            let(:opts) { { 'hosts' => [{'host' => 'localhost', 'port' => '8080'}] } }
+          context 'with http connection failure due to haproxy resolving service to wrong host or port' do
+            let(:opts) { { 'hosts' => [{'host' => 'localhost', 'port' => '8090'}] } }
             subject(:response) { connection.rpc.echo(request) }
 
             before :each do
@@ -116,7 +116,7 @@ describe Elementary::Connection do
             it { should be_instance_of Elementary::Future }
             it 'should have a connection refused reason' do
               expect(response.reason).not_to be_nil
-              expect(response.reason.to_s).to eq("connection refused: localhost:8080")
+              expect(response.reason.to_s).to eq("connection refused: localhost:8090")
             end
           end
           context 'with http connection success' do
