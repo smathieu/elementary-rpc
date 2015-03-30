@@ -34,12 +34,12 @@ def send_and_verify_connection_refused(msg)
   response = client.invoke_error_service(Elementary::Rspec::String.new(:data => msg))
   expect(response).to be_rejected
   expect(response.reason.class).to be Elementary::Middleware::HttpStatusError
-  expect(response.reason.message).to include("connection refused: localhost:8080")
+  expect(response.reason.message).to include("connection refused: localhost:8090")
 end
 
 # This test requires ha-proxy to be listening at localhost:8080, but no real rpc to be available
-describe SampleElementaryClient, :type => :integration do
-  subject (:client) {SampleElementaryClient.new()}
+describe SampleElementaryClient, "http connection returning error code 503", :type => :integration do
+  subject (:client) {SampleElementaryClient.new(8070)}
   describe "#initialize" do
     it "creates a connection" do
       expect(client.connection).not_to be_nil
@@ -54,9 +54,9 @@ describe SampleElementaryClient, :type => :integration do
   end
 end
 
-# This test requires that no process be listening at localhost:8080
-describe SampleElementaryClient, :type => :integration do
-  subject (:client) {SampleElementaryClient.new()}
+# This test requires that no process be listening at localhost:8090
+describe SampleElementaryClient, "http connection returning connection refused error", :type => :integration do
+  subject (:client) {SampleElementaryClient.new(8090)}
   describe "#initialize" do
     it "creates a connection" do
       expect(client.connection).not_to be_nil
@@ -72,8 +72,8 @@ describe SampleElementaryClient, :type => :integration do
 end
 
 # These tests requires ha-proxy to be listening at localhost:8080 routing requests to online rpc server
-describe SampleElementaryClient, :type => :integration do
-  subject (:client) {SampleElementaryClient.new()}
+describe SampleElementaryClient, "rpc requests returning non-connection related errors", :type => :integration do
+  subject (:client) {SampleElementaryClient.new(8080)}
   describe "#initialize" do
     it "creates a connection" do
       expect(client.connection).not_to be_nil
@@ -87,6 +87,11 @@ describe SampleElementaryClient, :type => :integration do
   describe "#invoke_service_not_found_service", "handles http error 404" do
     it "invokes service not found service" do
       send_and_verify_http_error_404('rspec1')
+    end
+  end
+  describe "#invoke_service_returning_failure", "handles http error 500" do
+    it "invokes service returning failure" do
+      send_and_verify_http_error_500('rspec1')
     end
   end
 end
