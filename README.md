@@ -46,8 +46,12 @@ Elementary.use(Elementary::Middleware::Statsd, :client => Statsd.instance)
 
 # Create our Connection object that knows about our Protobuf service
 # definition
-c = Elementary::Connection.new(Echoserv::Simple, :hosts => hosts)
+def connection
+  return @connection if @connection
 
+  @connection = Elementary::Connection.new(Echoserv::Simple,
+                                             :hosts => hosts)
+end
 # Create a Protobuf message to send over RPC
 msg = Echoserv::String.new(:data => str)
 
