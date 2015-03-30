@@ -96,10 +96,12 @@ TODO: Write usage instructions here
 ### Testing
 
 Install ha-proxy for your OS
- For Mac OSX, good reference source is http://nepalonrails.tumblr.com/post/9674428224/setup-haproxy-for-development-environment-on-mac
- Sample ha-proxy config
+ For Mac OSX, good reference source is:
+ http://nepalonrails.tumblr.com/post/9674428224/setup-haproxy-for-development-environment-on-mac
 
- cat /etc/haproxy.conf
+ Sample ha-proxy config
+```ruby
+ >cat /etc/haproxy.conf
  global
    maxconn 4096
    pidfile ~/tmp/haproxy-queue.pid
@@ -138,14 +140,16 @@ Install ha-proxy for your OS
  listen haproxyapp_admin:9100 127.0.0.1:9100
    mode http
    stats uri /
-
+```
 Start ha-proxy listener
- haproxy -f /etc/haproxy.conf
+
+    haproxy -f /etc/haproxy.conf
 
 Start the server hosting the rpc as below:
-`bundle exec rpc_server start ./spec/support/simpleservice.rb -p 8000 --http`
+
+    bundle exec rpc_server start ./spec/support/simpleservice.rb -p 8000 --http
 
 Run the tests
- `bundle exec rspec spec`
 
+    bundle exec rspec spec
 
