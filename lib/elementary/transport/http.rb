@@ -17,7 +17,7 @@ module Elementary
       # @param [Hash] opts Options to be passed directly into Faraday.
       def initialize(hosts, opts={})
         @hosts = hosts
-        @options = opts
+        @options = Hashie::Mash.new({:logging => true, :logger => :logger}).merge(opts)
       end
 
       def call(service, rpc_method, *params)
@@ -49,9 +49,11 @@ module Elementary
         return @client if @client
 
         faraday_options = @options.merge({:url => host_url})
+        logging = faraday_options.delete(:logging)
+        logger = faraday_options.delete(:logger)
         @client = Faraday.new(faraday_options) do |f|
           f.request :raise_on_status
-          f.response :logger
+          f.response :logger if logging and logger
           f.adapter :net_http_persistent
         end
         return @client
