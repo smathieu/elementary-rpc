@@ -3,16 +3,17 @@ module Elementary
   class Executor
     attr_reader :service, :transport
 
-    def initialize(service, transport)
+    def initialize(service, transport, future_opts={})
       @service = service
       @transport = transport
+      @future_opts = future_opts
     end
 
     def method_missing(method_name, *params)
       rpc_method = service.rpcs[method_name.to_sym]
       # XXX: explode if rpc_method is nil
 
-      future = Elementary::Future.new do
+      future = Elementary::Future.new(@future_opts) do
         # This is effectively a Rack middleware stack. yay.
         #
         # Easiest to think of it like this:
