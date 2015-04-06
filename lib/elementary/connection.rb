@@ -22,6 +22,9 @@ module Elementary
     # @option opts [Hash] :transport_options A +Hash+ of request options that
     #   will be passed down to the transport layer. This will depend on what
     #   options are available by the underlying transport
+    # @option opts [Hash] :future_options A +Hash+ of options to use when
+    #   constructing the Concurrent::Future to run the RPC. In particular, it
+    #   allows specifying the :executor for the Concurrent::Future.
     def initialize(service, opts={})
       opts = Hashie::Mash.new(opts)
 
@@ -34,10 +37,11 @@ module Elementary
       @transport = opts[:transport]
       @hosts = opts[:hosts] || DEFAULT_HOSTS
       @transport_opts = opts[:transport_options] || {}
+      @future_opts = opts[:future_options] || {}
     end
 
     def rpc
-      @rpc ||= Elementary::Executor.new(@service, select_transport)
+      @rpc ||= Elementary::Executor.new(@service, select_transport, @future_opts)
     end
 
     def select_transport
