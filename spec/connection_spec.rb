@@ -119,7 +119,8 @@ describe Elementary::Connection do
               expect(response.reason.to_s).to eq("connection refused: localhost:8090")
             end
           end
-          context 'with http connection success' do
+
+          context 'with http connection success', :type => :integration do
             let(:opts) { { 'hosts' => [{'host' => 'localhost', 'port' => '8000'}] } }
             subject(:response) { connection.rpc.echo(request) }
 
