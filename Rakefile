@@ -1,9 +1,18 @@
 require "bundler/gem_tasks"
 require 'rspec/core/rake_task'
 
-RSpec::Core::RakeTask.new
+task :default => [:spec, :build]
 
-task :default => ['protobuf:spec', 'spec', 'build']
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts = '--tag ~type:integration'
+end
+
+namespace :spec do
+  RSpec::Core::RakeTask.new(:integration) do |t|
+    t.rspec_opts = '--tag type:integration'
+  end
+end
+
 
 namespace :protobuf do
   desc 'Generate rspec protos'
