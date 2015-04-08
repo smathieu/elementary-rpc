@@ -1,5 +1,7 @@
 # Elementary RPC
 
+[![Build Status](https://travis-ci.org/lookout/elementary-rpc.svg?branch=master)](https://travis-ci.org/lookout/elementary-rpc) [![Gem Version](https://badge.fury.io/rb/elementary-rpc.svg)](http://badge.fury.io/rb/elementary-rpc)
+
 Elementary RPC is a basic
 [Protobuf](https://developers.google.com/protocol-buffers/docs/overview) HTTP
 RPC gem which aims to provide:
