@@ -5,12 +5,12 @@ require 'elementary/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "elementary-rpc"
-  spec.version       = Elementary::VERSION
+  spec.version       = [Elementary::VERSION, ENV['TRAVIS_BUILD_NUMBER'] || 'dev'].join('.')
   spec.authors       = ["R. Tyler Croy"]
   spec.email         = ["tyler@monkeypox.org"]
   spec.summary       = "Gem supporting Protobuf RPC in a simple way"
-  spec.description   = "BLANK"
-  spec.homepage      = ""
+  spec.description   = "Gem supporting Protobuf RPC over HTTP with futures and fun"
+  spec.homepage      = "https://github.com/lookout/elementary-rpc"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
