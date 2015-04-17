@@ -54,6 +54,18 @@ def connection
   @connection = Elementary::Connection.new(Echoserv::Simple,
                                              :hosts => hosts)
 end
+# We can also use existing Faraday middleware, since our HTTP transport is built
+# on Faraday:
+c = Elementary::Connection.new(Echoserv::Simple,
+                                :hosts => hosts,
+                                :transport_options => {
+                                  :faraday_middleware => [
+                                    [ FaradayMiddleware::FollowRedirects, :limit => 2 ]
+                                   ]
+                                 })
+
+
+
 # Create a Protobuf message to send over RPC
 msg = Echoserv::String.new(:data => str)
 
