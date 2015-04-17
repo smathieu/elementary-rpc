@@ -48,14 +48,27 @@ module Elementary
       def client
         return @client if @client
 
+        faraday_middleware = @options.delete(:faraday_middleware) || []
         faraday_options = @options.merge({:url => host_url})
         logging = faraday_options.delete(:logging)
         logger = faraday_options.delete(:logger)
+
         @client = Faraday.new(faraday_options) do |f|
           f.request :raise_on_status
           f.response :logger, logger if logging
           f.adapter :net_http_persistent
         end
+
+        # Adapters aren't middleware, so we have to pop the adapter off before
+        # we insert new middleware.  See:
+        # https://github.com/lostisland/faraday/issues/375,
+        # https://github.com/lostisland/faraday/issues/47
+        adapter = @client.builder.handlers.pop
+        faraday_middleware.each do |klass, *args|
+          @client.use klass, *args
+        end
+        @client.builder.handlers << adapter
+
         return @client
       end
     end
