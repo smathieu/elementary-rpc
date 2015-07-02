@@ -109,51 +109,11 @@ Install ha-proxy for your OS
  For Mac OSX, good reference source is:
  http://nepalonrails.tumblr.com/post/9674428224/setup-haproxy-for-development-environment-on-mac
 
- Sample ha-proxy config
-```ruby
- >cat /etc/haproxy.conf
- global
-   maxconn 4096
-   pidfile ~/tmp/haproxy-queue.pid
-   log /tmp/haproxy/log    local0
-   log /tmp/haproxy/log    local1 notice
-
- defaults
-   log global
-   mode http
-   timeout connect 300000
-   timeout client 300000
-   timeout server 300000
-   maxconn 2000
-   option redispatch
-   retries 3
-   option httpclose
-   option httplog
-   option forwardfor
-   option httpchk HEAD / HTTP/1.0
-
- frontend http-farm-1
-   bind :8080
-   default_backend app1latest
-
- frontend http-farm-2
-   bind :8070
-   default_backend app2latest
-
- backend app1latest
-   balance roundrobin
-   server localhost_8000 localhost:8000
-
- backend app2latest
-   balance roundrobin
-
- listen haproxyapp_admin:9100 127.0.0.1:9100
-   mode http
-   stats uri /
+Sample ha-proxy config can be found in `spec/support/haproxy.conf`.
 ```
 Start ha-proxy listener
 
-    haproxy -f /etc/haproxy.conf
+    haproxy -f spec/support/haproxy.conf
 
 Start the server hosting the rpc as below:
 
