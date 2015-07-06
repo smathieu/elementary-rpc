@@ -116,7 +116,7 @@ describe Elementary::Connection do
             it { should be_instance_of Elementary::Future }
             it 'should have a connection refused reason' do
               expect(response.reason).not_to be_nil
-              expect(response.reason.to_s).to eq("connection refused: localhost:8090")
+              expect(response.reason.to_s).to include("connection refused: localhost:8090")
             end
           end
 

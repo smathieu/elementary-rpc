@@ -31,7 +31,7 @@ module Elementary
 
           return rpc_method[:response_type].decode(response.body)
         rescue StandardError => e
-          raise
+          raise e.exception("#{service.name}##{rpc_method.method}: #{e.message}")
         end
       end
 
