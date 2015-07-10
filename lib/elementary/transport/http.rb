@@ -8,6 +8,8 @@ require 'elementary/future'
 module Elementary
   module Transport
     class HTTP
+      CONTENT_TYPE_HEADER = 'Content-Type'.freeze
+      CONTENT_TYPE = 'application/x-protobuf'.freeze
 
       # Create a HTTP transport object for sending protobuf objects to the
       # service host names enumerated in +hosts+
@@ -26,6 +28,7 @@ module Elementary
           response = client.post do |h|
             path = "#{CGI.escape(service.name)}/#{rpc_method.method}"
             h.url(path)
+            h.headers[CONTENT_TYPE_HEADER] = CONTENT_TYPE
             h.body = params[0].encode
           end
 
@@ -74,4 +77,3 @@ module Elementary
     end
   end
 end
-
