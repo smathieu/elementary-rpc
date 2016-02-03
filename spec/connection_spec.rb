@@ -59,7 +59,7 @@ describe Elementary::Connection do
       described_class.new(Elementary::Rspec::Simple, opts)
     end
     describe '#select_transport' do
-      subject(:transport) { connection.select_transport }
+      subject(:transport) { connection.rpc.transport }
 
       context 'by default' do
         it { should be_instance_of Elementary::Transport::HTTP }
