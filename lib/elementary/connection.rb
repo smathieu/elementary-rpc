@@ -38,6 +38,8 @@ module Elementary
       @hosts = opts[:hosts] || DEFAULT_HOSTS
       @transport_opts = opts[:transport_options] || {}
       @future_opts = opts[:future_options] || {}
+      # Create exectutor here to avoid threading issues later. See Issue #43
+      rpc
     end
 
     def rpc

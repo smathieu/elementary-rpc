@@ -59,7 +59,7 @@ describe Elementary::Connection do
       described_class.new(Elementary::Rspec::Simple, opts)
     end
     describe '#select_transport' do
-      subject(:transport) { connection.select_transport }
+      subject(:transport) { connection.rpc.transport }
 
       context 'by default' do
         it { should be_instance_of Elementary::Transport::HTTP }
@@ -69,9 +69,11 @@ describe Elementary::Connection do
         let(:opts) { {:transport_options => transport_opts} }
         let(:transport_opts) do
           Hashie::Mash.new({
-            :timeout => 3,
-            :open_timeout => 1,
-          })
+                             :request => {
+                               :timeout => 3,
+                               :open_timeout => 1,
+                             }
+                           })
         end
 
         it 'should pass request_options to the transport' do
