@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "rake"
 
-  spec.add_dependency 'concurrent-ruby', '~> 1.0.0'
+  spec.add_dependency 'concurrent-ruby', '>= 0.7'
   spec.add_dependency 'faraday', '~> 0.9.0'
   spec.add_dependency 'net-http-persistent', '~> 2.9.4'
   spec.add_dependency 'lookout-statsd', '~> 1.0.0'
