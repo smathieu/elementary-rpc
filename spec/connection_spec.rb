@@ -107,7 +107,7 @@ describe Elementary::Connection do
         describe '#echo' do
           let(:request) { Elementary::Rspec::String.new(:data => 'rspec') }
           context 'with http connection failure due to haproxy resolving service to wrong host or port' do
-            let(:opts) { { 'hosts' => [{'host' => 'localhost', 'port' => '8090'}] } }
+            let(:opts) { { :hosts => [{:host => 'localhost', :port => '8090'}] } }
             subject(:response) { connection.rpc.echo(request) }
 
             before :each do
