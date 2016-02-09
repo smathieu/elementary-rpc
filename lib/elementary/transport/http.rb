@@ -19,7 +19,7 @@ module Elementary
       # @param [Hash] opts Options to be passed directly into Faraday.
       def initialize(hosts, opts={})
         @hosts = hosts
-        @options = Hashie::Mash.new({:logging => true, :logger => nil}).merge(opts)
+        @options = {:logging => true, :logger => nil}.merge(opts)
         # Create connection here to avoid threading issues later. See Issue #43
         client
       end

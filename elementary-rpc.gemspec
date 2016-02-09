@@ -25,5 +25,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday', '~> 0.9.0'
   spec.add_dependency 'net-http-persistent', '~> 2.9.4'
   spec.add_dependency 'lookout-statsd', '~> 1.0.0'
-  spec.add_dependency 'hashie'
 end

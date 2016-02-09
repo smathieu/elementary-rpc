@@ -64,6 +64,15 @@ c = Elementary::Connection.new(Echoserv::Simple,
                                    ]
                                  })
 
+# Specify request timeout
+c = Elementary::Connection.new(Echoserv::Simple,
+                                :hosts => hosts,
+                                :transport_options => {
+                                  :request => {
+                                    :timeout => 5,
+                                    :open_timeout => 2,
+                                  }
+                                 })
 
 
 # Create a Protobuf message to send over RPC

@@ -71,6 +71,8 @@ describe Elementary::Transport::HTTP do
       it 'should pass options to Faraday.new' do
         expect(Faraday).to receive(:new).with(hash_including(opts)).and_call_original
         expect(client).to be_instance_of Faraday::Connection
+        expect(client.options.timeout).to eq(3)
+        expect(client.options.open_timeout).to eq(1)
       end
     end
 

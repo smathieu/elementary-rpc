@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'protobuf'
-require 'hashie'
 
 require 'elementary/middleware'
 require 'elementary/transport'
@@ -26,8 +25,6 @@ module Elementary
     #   constructing the Concurrent::Future to run the RPC. In particular, it
     #   allows specifying the :executor for the Concurrent::Future.
     def initialize(service, opts={})
-      opts = Hashie::Mash.new(opts)
-
       if service.nil? || service.superclass != Protobuf::Rpc::Service
         raise ArgumentError,
           "Cannot construct an Elementary::Connection with `#{service}` (#{service.class})"
